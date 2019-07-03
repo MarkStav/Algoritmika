@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void xorSwap( int *x, int *y){
+    if (*x == *y)
+        return;
+    *x ^= *y;
+    *y ^= *x;
+    *x ^= *y;
+
+}
+int Evklid (int x, int y){
+    while (x != y ){
+        if (x > y)
+            x -= y;
+        else
+            y -= x;
+    }
+    return x;
+}
+int EvkliDiv(int a, int b){
+    while (b != 0){
+        int c = a % b;
+        a = b;
+        b = c;
+    }
+    return a;
+}
+int power (int base, int sign){
+    int result = 1;
+    while (sign != 0){
+        if (sign % 2 == 0){
+            sign /= 2;
+            base *= base;
+        } else {
+            result *= base;
+            sign --;
+        }
+    }
+    return result;
+}
+int main(int argc, const char* argv[]) {
+    
+    // меняем значение а и b между собой ( a = 10, b = 20 => a = 20, b = 10 )
+    int a = 10, b = 20;
+    printf("В начале: \na = %d \n", a);
+    printf("b = %d \n", b);
+    a = a ^ b;
+    b = b ^ a;
+    a = a ^ b;
+    printf("В конце: \na = %d \n", a);
+    printf("b = %d \n", b);
+
+    // меняем значение а и b между собой только теперь с помощью функции swap
+    xorSwap(&a,&b);
+    printf("В конце: \na = %d \n", a);
+    printf("b = %d \n\n", b);
+
+    // алгоритм Эвклида
+    printf("Введите 2 числа: \n");
+    scanf("%d",&a);
+    scanf("%d",&b);
+
+    while (a != b ){
+        if (a > b)
+            a -= b;
+        else
+            b -= a;
+    }
+    printf("Наибольший общий делитель: %d \n\n", a);
+
+    // или тоже самое
+    printf("Наибольший общий делитель: %d\n", Evklid(10, 20));
+
+
+    //алгоритм Эвклида с делением
+    printf("Наибольший общий делитель: %d\n\n", EvkliDiv(125,75));
+    
+
+    printf("Степень числа: %d\n", power(2,10));
+
+
+    return 0;
+}
