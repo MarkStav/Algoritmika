@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <zconf.h>
+
+void fillArray(int* arr, int len){
+    for (int i = 0; i < len ; i++)
+        arr[i] = rand() % 100;
+}
+
+void printArray(int* arr, int len){
+    for (int i = 0; i < len; ++i)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+int linearSearch(int* arr, int len, int v){ // линейный поиск
+    int i = 0;
+    while (i < len && arr[i] != v) i++;
+    return (i == len) ? -1 : i;
+}
+
+int barierSearch(int* arr, int len, int v){ // поиск с гарантированно известным значением
+    int i = 0;
+    //arr[len] = v;
+    while (arr[i] != v) i++;
+    return (i == len) ? -1 : i;
+}
+
+void swap (int *a, int *b){
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
+}
+
+void bubbleSort(int* arr, int len){ // пузырьковая сортировка
+    for (int i = 0; i < len; ++i)
+        for (int j = 0; j < len - 1; ++j)
+            if (arr[j] > arr[j + 1])
+                swap(&arr[j], &arr[j + 1]);
+}
+
+void pickSort(int* arr, int len){
+    for (int i = 0; i < len; ++i) {
+        int flag = i;
+        for (int j = i + 1; j < len; ++j) {
+            if (arr[j] < arr[flag]) {
+                flag = j;
+            }
+        }
+        if (arr[i] != arr[flag])
+            swap(&arr[i], &arr[flag]);
+    }
+}
+
+int binarySearch(int* arr, int len, int v){ //поиск половинного деления или бинарный поиск (быстрее предыдущих)
+    int left = 0, right = len - 1, mid = (left + right) / 2;
+    while (left  <= right && arr[mid] != v){
+        if (arr[mid] < v)
+            left = mid;
+        else
+            right = mid;
+        mid = (left + right) / 2;
+    }
+    if (arr[mid] == v)
+        return mid;
+    else
+        return -1;
+}
+
+int binarySearch_v2(int* arr, int len, int v){  // бинарный поиск с применением интерполярности (самый быстрый вариант поиска)
+    int left = 0, right = len - 1, mid = left + ((v - arr[left]) * (right - left)) / (arr[right] - arr[left]);
+    while (left  <= right && arr[mid] != v){
+        if (arr[mid] < v)
+            left = mid;
+        else
+            right = mid;
+        mid = (left + right) / 2;
+    }
+    if (arr[mid] == v)
+        return mid;
+    else
+        return -1;
+}
+
+
+
+int main (int argc, const char* argv[]) {
+
+    const int SIZE = 28;
+    int arr[SIZE];
+
+    fillArray(arr, SIZE);
+    printArray(arr, SIZE);
+    printf("index = %d\n", linearSearch(arr, SIZE, 192));
+    printf("index = %d\n", barierSearch(arr, SIZE, 92));
+    //bubbleSort(arr, SIZE);
+    pickSort(arr, SIZE);
+    printArray(arr, SIZE);
+    printf("index = %d\n", binarySearch(arr, SIZE, 92));
+    printf("index = %d\n", binarySearch_v2(arr, SIZE, 92));
+
+
+    return 0;
+}
